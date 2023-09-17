@@ -26,7 +26,7 @@ To run this project on your local machine, follow these steps:
 2. Navigate to the project directory:
 
    ```bash
-   cd pokemon-api-practice
+   cd ReactPokemon
 
 3. Install the project dependencies using Yarn:
 
