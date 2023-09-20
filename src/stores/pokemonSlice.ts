@@ -9,6 +9,7 @@ interface initialStateInterface {
     message: string;
     pokemonsArray: pokemonInterface[];
     selection: number;
+    loading: boolean;
 }
 
 const initialState: initialStateInterface = {
@@ -19,6 +20,7 @@ const initialState: initialStateInterface = {
     message: "",
     pokemonsArray: [],
     selection: 0,
+    loading: false,
 };
 
 export const pokemonSlice = createSlice({
@@ -46,6 +48,9 @@ export const pokemonSlice = createSlice({
         setSelection: (state, action) => {
             state.selection = action.payload;
         },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
         newGame: (state) => {
             state.pokemonId = 0,
             state.showPokemon = false,
@@ -54,10 +59,11 @@ export const pokemonSlice = createSlice({
             state.message = "",
             state.pokemonsArray = [],
             state.selection = 0,
+            state.loading = false
             console.log("New game");
         }
     },
 });
 
-export const { setPokemonId, setShowPokemon, setPokemon, setShowAnswer, setMessage, setPokemonsArray, setSelection, newGame } = pokemonSlice.actions;
+export const { setPokemonId, setShowPokemon, setPokemon, setShowAnswer, setMessage, setPokemonsArray, setSelection, setLoading, newGame } = pokemonSlice.actions;
 export default pokemonSlice.reducer;

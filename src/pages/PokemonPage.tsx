@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { PokemonPicture } from "../components/PokemonPicture";
 import getPokemonOptions from "../helpers/getPokemonOptions";
-import { setPokemonsArray, setPokemon, setPokemonId, setShowPokemon, setMessage, setShowAnswer, newGame } from "../stores/pokemonSlice";
+import { setPokemonsArray, setPokemon, setPokemonId, setShowPokemon, setMessage, setShowAnswer, newGame, setLoading } from "../stores/pokemonSlice";
 import { useSelector } from 'react-redux';
 import { PokemonState, useAppDispatch } from "../stores/store";
 import { getPokemonFromArray } from "../services/pokemonServices";
 import { PokemonOptions } from "../components/PokemonOptions";
+import '../css/animations.css'
 
 export const PokemonPage = () => {
     const pokemon = useSelector((state: PokemonState) => state.pokemon);
@@ -13,6 +14,7 @@ export const PokemonPage = () => {
 
     const fetchData = async () => {
         console.log("Fetching data...");
+        dispatch(setLoading(true));
         const pokemonArray = await getPokemonOptions();
         dispatch(setPokemonsArray(pokemonArray));
 
@@ -24,6 +26,7 @@ export const PokemonPage = () => {
         }
 
         console.log("Data fetched!");
+        dispatch(setLoading(false));
     }
 
     useEffect(() => {
@@ -53,20 +56,24 @@ export const PokemonPage = () => {
         <>
             <div>
                 <h1>Who is this Pokemon?</h1>
-                {
-                    pokemon.pokemonId != 0 && 
-                    <>
-                        <PokemonPicture /> 
+                {pokemon.loading ? <span className="loader"></span> : 
+                    <div>
                         {
-                            !pokemon.showPokemon &&
-                            <PokemonOptions />
+                            pokemon.pokemonId != 0 && 
+                            <>
+                                <PokemonPicture /> 
+                                {
+                                    !pokemon.showPokemon &&
+                                    <PokemonOptions />
+                                }
+                                {
+                                    pokemon.showAnswer && <h2>{ pokemon.message }</h2>
+                                }
+                            </>
                         }
-                        {
-                            pokemon.showAnswer && <h2>{ pokemon.message }</h2>
-                        }
-                    </>
+                        <button style={{marginTop: 30, backgroundColor: '#c0c0c0'}} onClick={resetGame}>New Game</button>
+                    </div>
                 }
-                <button style={{marginTop: 30, backgroundColor: '#c0c0c0'}} onClick={resetGame}>New Game</button>
             </div>
         </>
     )
