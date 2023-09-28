@@ -1,15 +1,23 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store} from "@reduxjs/toolkit";
 import pokemonReducer from "./pokemonSlice";
 import { useDispatch } from "react-redux";
 
-export const store = configureStore({
+// Define el estado global de tu aplicación
+export interface RootState {
+    pokemon: ReturnType<typeof pokemonReducer>;
+}
+
+// Crea la tienda con la configuración y el reducer
+export const store: Store<RootState> = configureStore({
     reducer: {
         pokemon: pokemonReducer,
     },
-})
+});
 
-export type PokemonState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export const useAppDispatch: () => AppDispatch = useDispatch
+// Tipo para el despacho de acciones
+export type AppDispatch = typeof store.dispatch;
 
-export default store
+// Exporta el despacho de acciones para su uso en componentes
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+export default store;
